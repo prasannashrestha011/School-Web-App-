@@ -55,8 +55,8 @@ const OptionField:React.FC<OptionProp>=({id,question,ans1,ans2,ans3,ans4,correct
       
     }
     return(
-        <div className="border  border-gray-400 ">
-            <form onSubmit={sendHandler} className="flex  flex-col gap-3">
+        <div className="border  border-gray-400 bg-slate-200 p-3">
+            <form onSubmit={sendHandler} className="flex  flex-col gap-3 font-serif">
        
                 <div className="text-2xl">
                 <p>{question}?</p>
@@ -67,7 +67,7 @@ const OptionField:React.FC<OptionProp>=({id,question,ans1,ans2,ans3,ans4,correct
                         <span><input type="radio"  name="opt"  value={ans4}  onChange={selectedAnsHandler}/>{ans4}</span>
                     </div>
                 </div>
-                   {confirm?<FontAwesomeIcon icon={faCheck}/>:<button type="submit" className="bg-green-400 text-slate-100 rounded-lg w-32">Confirm Answer</button>}
+                   {confirm?<FontAwesomeIcon icon={faCheck}/>:<button type="submit" className="bg-green-400 text-slate-200 rounded-lg w-32 h-7">Confirm Answer</button>}
             </form>
         </div>
     )

@@ -5,8 +5,10 @@ interface SubmitTestProp{
     counter:number
     is_test_submit:boolean,
     setIsTestSubmit:(is_test_submit:boolean)=>void
+    questionList:number[]
+    
 }
-const SubmitTest:React.FC<SubmitTestProp>=({quiz_id,counter,is_test_submit,setIsTestSubmit})=>{
+const SubmitTest:React.FC<SubmitTestProp>=({quiz_id,counter,is_test_submit,setIsTestSubmit,questionList})=>{
     const SubmitHandler=async(e:FormEvent)=>{
         e.preventDefault()
        try{
@@ -22,7 +24,10 @@ const SubmitTest:React.FC<SubmitTestProp>=({quiz_id,counter,is_test_submit,setIs
     }
     return(
         <>
-        {is_test_submit?<center>Test Submitted</center>
+        {is_test_submit?<center>
+            <p className="text-4xl font-serif">Test Finished!!</p>
+            <p className="text-4xl">{counter}/{questionList.length}</p>
+            </center>
         :
         <form onSubmit={SubmitHandler}>
            <center> <button 

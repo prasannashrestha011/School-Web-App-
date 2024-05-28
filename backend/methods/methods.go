@@ -190,3 +190,24 @@ func InsertScore(c *gin.Context) {
 		"message": "score inserted",
 	})
 }
+
+// tablescores
+func Get_Table_Score(c *gin.Context) {
+	scoreList := []structure.ScoreKey{}
+	selectQuery := "SELECT * FROM tablescores"
+	rows, err := db.Query(selectQuery)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	for rows.Next() {
+		userScore := structure.ScoreKey{}
+		err := rows.Scan(&userScore.Quiz_id, &userScore.Username, &userScore.Score)
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+		scoreList = append(scoreList, userScore)
+	}
+	c.JSON(http.StatusOK, scoreList)
+}

@@ -10,6 +10,9 @@ import CreateQuestion from './components/createQuestion';
 import { AdminProvider } from './context/admincontext';
 import AdminOnly from './context/adminonly';
 import WebSocketClient from './websocket/websocketclient';
+import Admin from './admin/admin';
+import GetPDF from './admin/getpdf';
+import { ComponentProvider } from './context/componentprovider';
 
 const App:React.FC=()=>{
 
@@ -18,16 +21,20 @@ const App:React.FC=()=>{
         <Router>
       <Routes>
       <Route element={<AdminProvider/>}>
-            <Route path='/login' element={<LoginPage/>}/>
-            <Route element={<RequireAuth/>}>
-              <Route path='/' element={<StartTestInterface/>} />
-              <Route path='/home' element={<Question/>}/>
-              <Route path='/message' element={<WebSocketClient/>} />
-            {/* admin panel*/}
-              <Route element={<AdminOnly/>}>
-                 <Route path='/create-questions' element={<CreateQuestion/>}/>
-              </Route>
-              {/* admin panel*/}
+           <Route element={<ComponentProvider />}>
+                      <Route path='/login' element={<LoginPage/>}/>
+                        <Route element={<RequireAuth/>}>
+                          <Route path='/' element={<StartTestInterface/>} />
+                          <Route path='/class/test' element={<Question/>}/>
+                          <Route path='/message' element={<WebSocketClient/>} />
+                          <Route path='/notes' element={<GetPDF/>}/>
+                        {/* admin panel*/}
+                          <Route element={<AdminOnly/>}>
+                            <Route path='/admin-panel' element={<Admin/>} />
+                            <Route path='/create-questions' element={<CreateQuestion/>}/>
+                          </Route>
+                          {/* admin panel*/}
+                      </Route>
             </Route>
          
         </Route>

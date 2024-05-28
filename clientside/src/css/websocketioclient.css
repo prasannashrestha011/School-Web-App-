@@ -1,0 +1,77 @@
+.main-body {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    overflow: auto;
+}
+
+.outermessage-container {
+    height: 100vh; /* Use full viewport height for better scrolling */
+    overflow: auto;
+}
+
+.message-container {
+    width: 85%;
+    height: 75vh; /* Use viewport height for better control */
+    overflow: auto;
+    margin-bottom: 0;
+}
+
+/* Media Queries */
+@media (min-width: 200px) and (max-width: 800px) {
+    .main-body {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        text-align: center;
+        height: fit-content;
+        padding-bottom: 88%;
+        
+    }
+    
+    .message-input-container {
+        width: 90%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 0;
+    }
+    
+    .main-input-container {
+        width: 195px;
+    }
+    
+    .message-input {
+        width: 80%;
+        height: 40px;
+    }
+    
+    .outermessage-container {
+        height: 100vh;
+        overflow: auto;
+    }
+    
+    .message-container {
+        width: 85%;
+        height: 75vh;
+        overflow: auto;
+        margin-bottom: 0;
+    }
+    
+    .message-button {
+        width: 99%;
+        font-size: 13px;
+        height: 40px;
+    }
+    
+    .file-message-input-container {
+        width: 80%;
+        height: auto;
+    }
+    
+    .file-input-submit-btn {
+        width: 92%;
+        height: 40px;
+        font-size: 13px;
+    }
+}

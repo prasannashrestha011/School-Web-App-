@@ -23,7 +23,8 @@ const Question:React.FC=()=>{
     useEffect(()=>{
         fetchQuestions();
     },[])
-    var interval:NodeJS.Timer
+    let interval:NodeJS.Timer
+    
     useEffect(()=>{
          interval=setInterval(()=>{
             setSecond(second+1)
@@ -37,10 +38,17 @@ const Question:React.FC=()=>{
         return ()=>clearInterval(interval)
     })
     useEffect(()=>{
-        if(minutes==1){
+        if(minutes==5){
             clearInterval(interval)
         }
+       
     },[minutes])
+    useEffect(()=>{
+        if(is_test_submit){
+            clearInterval(interval)
+        }
+    },[is_test_submit])
+   
     const logoutHandler=()=>{
         window.localStorage.removeItem("user_login_status")
         window.location.reload()
@@ -48,13 +56,13 @@ const Question:React.FC=()=>{
     return(
         <div>
             
-            <span>{userID}</span>
+   
           <center><span className="text-4xl">{minutes}:{second}</span></center>
         <button onClick={()=>logoutHandler()} className="bg-red-600 text-slate-100 ">Logout</button>
          {is_test_submit?(
             ""
          ):(
-            minutes==1?
+            minutes==5?
                  
                 <div className="text-2xl">
                        {/* 1st condition*/}
@@ -89,7 +97,10 @@ const Question:React.FC=()=>{
            quiz_id={quiz_id} 
            counter={counter} 
            is_test_submit={is_test_submit} 
-           setIsTestSubmit={setIsTestSubmit}/>
+           setIsTestSubmit={setIsTestSubmit}
+           questionList={question}
+          />
+        
         </div>
     )
     

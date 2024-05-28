@@ -24,3 +24,15 @@ type ScoreKey struct {
 	Username *string `json:"username"`
 	Score    int     `json:"score"`
 }
+type UserMessage struct {
+	Id       *int   `json:"user_id"`
+	Username string `json:"username"`
+	Message  string `json:"message"`
+}
+
+type PdfFile struct {
+	Id       *int    `json:"file_id"`
+	Username string  `json:"file_by"`
+	FileName *string `json:"file_name"`
+	FilePath string  `json:"file_path"`
+}
