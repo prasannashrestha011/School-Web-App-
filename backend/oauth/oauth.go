@@ -22,8 +22,7 @@ func GoogleOathInit() {
 	if err != nil {
 		fmt.Println("Error loading .env file")
 	}
-	key := os.Getenv("GOOGLE_CLIENT_ID")
-	fmt.Println("User KEY:", key)
+
 	googleOauthConfig = &oauth2.Config{
 		RedirectURL:  "http://localhost:3000",
 		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
