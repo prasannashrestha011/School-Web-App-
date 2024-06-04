@@ -1,12 +1,18 @@
 package structure
 
 type DataKey struct {
-	Id       *int    `json:"id"`
+	Id       int     `json:"id"`
 	Username string  `json:"username"`
 	Password string  `json:"password"`
 	Role     *string `json:"role"`
 }
-
+type UserInfo struct {
+	Id           string `json:"google_id"`
+	Email        string `json:"email"`
+	Name         string `json:"name"`
+	ProfileURL   string `json:"profileURL"`
+	Verify_Email bool   `json:"verify_email"`
+}
 type QuestionKey struct {
 	Id          *int   `json:"q_id"`
 	Question    string `json:"question"`
@@ -25,9 +31,10 @@ type ScoreKey struct {
 	Score    int     `json:"score"`
 }
 type UserMessage struct {
-	Id       *int   `json:"user_id"`
-	Username string `json:"username"`
-	Message  string `json:"message"`
+	Id          *int   `json:"user_id"`
+	Username    string `json:"username"`
+	Message     string `json:"message"`
+	Profile_URI string `json:"profile_uri"`
 }
 
 type PdfFile struct {

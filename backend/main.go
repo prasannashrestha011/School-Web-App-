@@ -8,9 +8,12 @@ import (
 	"project/database"
 	"project/filemanagement"
 	"project/methods"
+	"project/oauth"
+
 	"project/strategy"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 
 	"github.com/gorilla/websocket"
 )
@@ -22,6 +25,7 @@ type Client struct {
 
 var clients = make(map[*websocket.Conn]*Client)
 var broadcast = make(chan []byte)
+var broadcastUser = make(chan []byte)
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
@@ -38,7 +42,7 @@ func SendMessageToClient(client *websocket.Conn) {
 		return
 	}
 	for _, msg := range message {
-		err := client.WriteMessage(websocket.TextMessage, []byte(msg.Username+"__"+msg.Message))
+		err := client.WriteMessage(websocket.TextMessage, []byte(msg.Username+"__"+msg.Profile_URI+"__"+msg.Message))
 		if err != nil {
 			fmt.Println(err.Error())
 			return
@@ -47,7 +51,11 @@ func SendMessageToClient(client *websocket.Conn) {
 }
 func websocketHandler(c *gin.Context) {
 	username := c.Query("username")
+	broadcastUser <- []byte(username + " has joined the chat")
+
+	profile_uri := c.Query("profile_uri")
 	fmt.Println("username:", username)
+	fmt.Println("profileuri", profile_uri)
 	if username == " " {
 		panic("username is required")
 	}
@@ -62,19 +70,20 @@ func websocketHandler(c *gin.Context) {
 		conn.Close()
 	}()
 	SendMessageToClient(conn)
+
 	for {
 		_, message, err := conn.ReadMessage()
 		if err != nil {
 			log.Println("Error writing message:", err)
 			break
 		}
-		_, err = db.Exec("INSERT INTO userconversation (username,user_message) VALUES(?,?)", username, message)
+		_, err = db.Exec("INSERT INTO userconversation (username,user_message,profile_uri) VALUES(?,?,?)", username, message, profile_uri)
 		if err != nil {
-			fmt.Println(err.Error())
+			fmt.Println(err.Error(), "is from db")
 			return
 		}
 		fmt.Println(string(message), "is from client")
-		broadcast <- []byte(username + " __" + string(message))
+		broadcast <- []byte(username + "__" + profile_uri + " __" + string(message))
 
 	}
 }
@@ -96,11 +105,31 @@ func broadCastMessage() {
 
 	}
 }
+func broadCastUserJoined() {
+	for {
+		msg := <-broadcastUser
+		for client := range clients {
+			err := client.WriteMessage(websocket.TextMessage, msg)
+			fmt.Println("user joined brodcasted")
+			if err != nil {
+				delete(clients, client)
+				clients[client].connection.Close()
+				log.Println("err:", err)
+				return
+			}
+		}
+	}
+}
 
 func main() {
 	database.Initializer()
+	godotenv.Load()
+	oauth.GoogleOathInit()
 	r := gin.Default()
+
 	go broadCastMessage()
+	go broadCastUserJoined()
+
 	corsHandler := func(c *gin.Context) {
 		origin := c.GetHeader("Origin")
 		c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
@@ -116,12 +145,17 @@ func main() {
 	}
 
 	r.GET("/ws", websocketHandler)
+
 	r.Use(corsHandler)
 
 	//static file server
 	r.StaticFS("public", http.Dir("./public"))
+
 	r.POST("/registration", strategy.Registration)
 	r.POST("/login", strategy.Authentication)
+	r.GET("/auth/callback", oauth.GoogleCallbackHandler)
+	r.POST("/insert-user-info", strategy.InsertUserInfo)
+	r.GET("/get-user-info/:id", strategy.GetUserInfo)
 	r.POST("/create-question", methods.Create_Questions)
 	r.GET("/get-questions", methods.Get_Questions)
 	r.PUT("/update-question/:q_id", methods.Update_Question)

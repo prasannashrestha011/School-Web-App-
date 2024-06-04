@@ -43,8 +43,8 @@ const GetPDF:React.FC=()=>{
      <div>
         
         <center className="text-3xl font-serif">Notes</center>
-        <div className=" fixed left-4 top-1" onClick={()=>SideNavBarHandler()}><FontAwesomeIcon icon={faBars} size="2x"/></div>
-         {component_state &&username? <NavBar show_nav_bar={component_state?.show_nav_bar} setShowNavBar={component_state?.setShowNavBar} username={username}/> :""}
+       
+         
         <div className="grid grid-cols-3 gap-4 ml-4 mt-8" >
          
         {pdflist.map((item, idx) => (

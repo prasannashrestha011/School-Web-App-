@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var db, err = database.DB()
+var db, _ = database.DB()
 
 func InsertMessages(c *gin.Context) {
 	username := c.Param("username")
@@ -47,7 +47,7 @@ func GetMessages() ([]structure.UserMessage, error) {
 	}
 	for rows.Next() {
 		userMessages := structure.UserMessage{}
-		err := rows.Scan(&userMessages.Id, &userMessages.Username, &userMessages.Message)
+		err := rows.Scan(&userMessages.Id, &userMessages.Username, &userMessages.Message, &userMessages.Profile_URI)
 		if err != nil {
 			fmt.Println(err.Error())
 			return nil, err
