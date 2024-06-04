@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGoogleLogin, TokenResponse, CodeResponse } from "@react-oauth/google";
 import axios from 'axios';
 import { Navigate } from 'react-router-dom';
@@ -21,6 +21,7 @@ const GoogleLoginPage: React.FC = () => {
     
   
           setToken(tokenResponse.data.token)
+          console.log(tokenResponse.data.token)
           await InsertUser(tokenResponse.data.token)
           window.localStorage.setItem('userID',tokenResponse.data.token.id)
           window.localStorage.setItem('account_state',tokenResponse.data.token.verified_email)
@@ -45,6 +46,15 @@ const GoogleLoginPage: React.FC = () => {
           console.log(err)
         }
       }
+      useEffect(()=>{
+        if(token&&token.picture){
+          const img=new Image()
+          img.onload=()=>{
+            console.log('image rendered , go a head')
+          }
+          img.src=token.picture
+        }
+      },[])
       return (
         <>
           <button onClick={() => login()}>Login with google</button>

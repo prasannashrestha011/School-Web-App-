@@ -26,8 +26,8 @@ func GoogleOathInit() {
 	fmt.Println("User KEY:", key)
 	googleOauthConfig = &oauth2.Config{
 		RedirectURL:  "http://localhost:3000",
-		ClientID:     "912288367848-nvs2f3721ij51orl7h3kolmpjnad68l2.apps.googleusercontent.com",
-		ClientSecret: "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",
+		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+		ClientSecret: os.Getenv("GOOGLE_SECRET_KEY"),
 		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
 		Endpoint:     google.Endpoint,
 	}
