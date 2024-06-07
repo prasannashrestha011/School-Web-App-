@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"project/Userchat"
 	"project/database"
+	"project/eventlist"
 	"project/filemanagement"
 	"project/methods"
 	"project/oauth"
@@ -172,7 +173,8 @@ func main() {
 	r.POST("/upload-pdf/:username/:fileName", filemanagement.UploadPdf)
 	r.GET("/get-pdf", filemanagement.GetPdf)
 	r.POST("/insert-messages/:username", Userchat.InsertMessages)
-
+	r.GET("/get-notifications-list", eventlist.EventList)
+	r.GET("/get-notification-info", eventlist.EventInfo)
 	r.Run(":8080")
 
 	select {}

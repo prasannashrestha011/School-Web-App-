@@ -54,7 +54,7 @@ const GoogleLoginPage: React.FC = () => {
           }
           img.src=token.picture
         }
-      },[])
+      })
       return (
         <>
           <button onClick={() => login()}>Login with google</button>

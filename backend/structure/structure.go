@@ -43,3 +43,9 @@ type PdfFile struct {
 	FileName *string `json:"file_name"`
 	FilePath string  `json:"file_path"`
 }
+type NotificationMessage struct {
+	Id                  int    `json:"id"`
+	Username            string `json:"username"`
+	Profile_URI         string `json:"profile_uri"`
+	NotificationMessage string `json:"notification_message"`
+}
