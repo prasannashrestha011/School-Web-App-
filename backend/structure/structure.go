@@ -38,8 +38,22 @@ type UserMessage struct {
 }
 
 type PdfFile struct {
-	Id       *int    `json:"file_id"`
-	Username string  `json:"file_by"`
-	FileName *string `json:"file_name"`
-	FilePath string  `json:"file_path"`
+	Id            *int    `json:"file_id"`
+	Username      string  `json:"file_by"`
+	FileName      *string `json:"file_name"`
+	FilePath      string  `json:"file_path"`
+	Time_Uploaded string  `json:"time_uploaded"`
+}
+type NotificationMessage struct {
+	Id                  int    `json:"id"`
+	Username            string `json:"username"`
+	Profile_URI         string `json:"profile_uri"`
+	NotificationMessage string `json:"notification_message"`
+}
+type DashBoardMessage struct {
+	Id            int    `json:"id"`
+	Username      string `json:"username"`
+	Profile_URI   string `json:"profile_uri"`
+	Time_Uploaded string `json:"time_uploaded"`
+	Message       string `json:"message"`
 }

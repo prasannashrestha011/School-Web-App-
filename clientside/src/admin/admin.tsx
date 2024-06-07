@@ -1,12 +1,54 @@
-import axios from "axios";
+import axios from 'axios';
+
 import React,{useEffect, useState} from "react";
 import AddPdf from "./addpdf";
 import { faArrowAltCircleRight, faArrowCircleLeft, faArrowCircleRight, faCircleXmark, faCross, faCrosshairs, faHamburger, faHeartCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { io } from "socket.io-client";
+import SendNotification from './sendnotification';
+import DashBoard from './dashboard';
+
+interface AdminProp{
+    google_id:string,
+    email:string,
+    name:string,
+    profileURL:string,
+    verify_email:string,
+}
+interface ReceivedMessageProp{
+    username:string,
+    profile_uri:string,
+    message:string,
+   
+    
+}
+interface NotificationMessageProp{
+    username:string,
+    profile_uri:string,
+    notification_message:string
+}
 const Admin:React.FC=()=>{
+  
     const [scorelist,setScoreList]=useState<any[]>([])
+    const [fetchUser,setFetchUser]=useState<AdminProp | null>(null)
     const [show_pdf_panel,setShowPdfPanel]=useState<boolean>(false)
     const [show_table_score,setShowTableScore]=useState<boolean>(false)
+    const userID=window.localStorage.getItem("userID")
+    const fetchUserInfo=async()=>{
+        try{
+            const response = await axios.get(`http://localhost:8080/get-user-info/${userID}`);
+            if (response.status !== 200) {
+                throw new Error('Error fetching user info');
+            }
+               
+                setFetchUser(response.data)
+        }catch(err){
+            console.log(err)
+        }
+    }
+    useEffect(()=>{
+        fetchUserInfo()
+    },[])
     const GetScore=async()=>{
        try{
         const response=await axios.get("http://localhost:8080/get-scores")
@@ -16,21 +58,31 @@ const Admin:React.FC=()=>{
         console.log(err)
        }
     }
+  
     useEffect(()=>{
         GetScore()
     },[])
+   
     const togglePanel = () => {
-        setShowPdfPanel(!show_pdf_panel);
+       if(show_pdf_panel){
+        setShowPdfPanel(false)
+       }else{
+        setShowPdfPanel(true)
+       }
         // Enable or disable scroll depending on the panel visibility
         if (!show_pdf_panel) {
             document.body.style.overflow = 'hidden'; // Disable scrolling
         } 
     };
     return(
-        <div className="h-svh border  bg-slate-200 flex flex-row justify-between">
+        <div className="h-svh border  bg-slate-200 flex flex-row justify-between overflow-hidden">
             <center className="text-3xl font-serif fixed " style={{left:'50%'}}>Admin Panel</center>
-            <p className="fixed">   <FontAwesomeIcon icon={faHamburger} onClick={()=>setShowTableScore(!show_table_score)} className="mt-14"/></p>
-            <div className={`flex justify-center items-start mr-4 border border-black  bg-blue-800 w-80 ${show_table_score?'-translate-x-96':'-translate-x-0'} transition-transform duration-500`} style={{height:'100%'}}>
+           
+            <p className="fixed">
+                <FontAwesomeIcon icon={faHamburger} onClick={()=>setShowTableScore(!show_table_score)} className="mt-14"/>
+                </p>
+            
+            <div className={`flex justify-center items-start mr-4 border border-black  bg-blue-800 w-80 ${show_table_score?'-translate-x-0':'-translate-x-96'} transition-transform duration-500`} style={{height:'100%'}}>
             <p className="fixed top-2 left-72"><FontAwesomeIcon icon={faCircleXmark} size="2x" onClick={()=>setShowTableScore(!show_table_score)} /></p>
                 <center>
                    <ul>
@@ -66,11 +118,17 @@ const Admin:React.FC=()=>{
            
 
             <div>
-                    <div>{show_pdf_panel?<FontAwesomeIcon icon={faArrowCircleLeft} onClick={togglePanel} size="2x" className=" transition-transform duration-500"/>:<FontAwesomeIcon icon={faArrowCircleRight} onClick={togglePanel} size="2x" className=" transition-transform duration-500 translate-x-64"/>}</div>
-            <div className={`transition-transform duration-500 ${show_pdf_panel ? 'translate-x-0' : 'translate-x-80'}`}>
-                <AddPdf />
-            </div>
+        <div>
+            {show_pdf_panel?
+            <FontAwesomeIcon icon={faArrowCircleLeft} onClick={togglePanel} size="2x" className=" transition-transform duration-500"/>
+            :<FontAwesomeIcon icon={faArrowCircleRight} onClick={togglePanel} size="2x" className=" transition-transform duration-500 translate-x-64"/>}
         </div>
+            <div className={`transition-transform duration-500 ${show_pdf_panel ? 'translate-x-0' : 'translate-x-80'}`}>
+               {fetchUser?<AddPdf username={fetchUser?.name} profile_uri={fetchUser.profileURL} show_pdf_panel={show_pdf_panel} setShowPdfPanel={setShowPdfPanel}/>:""}
+            </div>
+            {fetchUser?<SendNotification username={fetchUser?.name} profile_uri={fetchUser.profileURL} />:""}
+        </div>
+        <DashBoard/>
         </div>
     )
 }

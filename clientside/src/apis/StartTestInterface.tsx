@@ -8,6 +8,8 @@ import { faBars, faCog, faEnvelope, faGear, faMessage } from "@fortawesome/free-
 import Setting from "../components/settingcomp";
 import NotificationBox from "../components/notificationbox";
 import axios from "axios";
+import { GenerateToken } from "../pushnotification/firebase";
+import EventList from "./event";
 interface UserProp{
     id:string,
     name:string,
@@ -47,13 +49,23 @@ const StartTestInterface:React.FC=()=>{
         setShowSettingPanel(!show_setting_panel)
     }
    
-   
+   useEffect(()=>{
+    GenerateToken()
+   },[])
     return(
-        <div className={`${isDarkThemeEnb?'bg-slate-800':'bg-slate-200'} h-screen transition-colors duration-300`}>
-            {fetched_user?<NotificationBox isDarkTheme={isDarkThemeEnb} username={fetched_user?.name} profile_uri={fetched_user?.profileURL}/>:""}
-           <div className="fixed " style={{left:'95%'}} onClick={()=>ShowSettingPanelHandler()}><FontAwesomeIcon className={`${isDarkThemeEnb?'text-slate-200':'text-slate-950'}`} icon={faGear} size="2x"/></div>
+        <div className={`${isDarkThemeEnb?'bg-blue-950':'bg-slate-200'} h-screen transition-colors duration-300`}>
             
-            {show_setting_panel&&component_state?<Setting isDarkTheme={component_state?.isDarkTheme} setIsDarkTheme={component_state?.setIsDarkTheme}/>:""}
+            {fetched_user?
+            <NotificationBox isDarkTheme={isDarkThemeEnb} username={fetched_user?.name} profile_uri={fetched_user?.profileURL}/>
+            :
+            ""}
+           <div className="fixed " style={{left:'95%'}} onClick={()=>ShowSettingPanelHandler()}>
+            <FontAwesomeIcon className={`${isDarkThemeEnb?'text-slate-200':'text-slate-950'}`} icon={faGear} size="2x"/>
+            </div>
+            
+            {show_setting_panel&&component_state?
+            <Setting isDarkTheme={component_state?.isDarkTheme} setIsDarkTheme={component_state?.setIsDarkTheme}/>
+            :""}
             {start_test?
             (
                 <Navigate to="/class/test" />
@@ -62,11 +74,12 @@ const StartTestInterface:React.FC=()=>{
                   
 
                     <center>
-                <div className="flex flex-col gap-5 justify-center items-center">
-                <button onClick={()=>setStartTest(true)} className="bg-red-500 w-44 h-16 text-2xl text-slate-200 font-serif rounded-xl"><p>Start Test</p></button>
-                    <span><a href="/message"><button className="bg-red-500 text-2xl w-44 h-14 rounded-xl text-slate-200">Group Chat</button></a></span>
+                <div className="flex gap-5 justify-center items-center flex-row  shadow-custom-black ">
+                <button onClick={()=>setStartTest(true)} className={` w-28 h-16 text-xl ${isDarkThemeEnb?'text-slate-200':'text-gray-950'} font-semibold  hover:bg-gray-300  transition duration-300`}><p>Start Test</p></button>
+                <span><a href="/message"><button className={` text-xl w-28 h-16 ${isDarkThemeEnb?'text-slate-200':'text-gray-950'} font-semibold hover:bg-gray-300  transition duration-300`}>Group Chat</button></a></span>
                 </div>
                 </center>
+               
                 </div>
             )}
         </div>

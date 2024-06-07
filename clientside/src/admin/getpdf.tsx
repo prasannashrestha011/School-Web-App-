@@ -4,6 +4,7 @@ import NavBar from "../components/navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import ComponentHook from "../hooks/componenthook";
+import { formatDistanceToNow } from "date-fns";
 const GetPDF:React.FC=()=>{
     const [pdflist,setPdfList]=useState<any[]>([])
     const username=window.localStorage.getItem("user_name")
@@ -42,25 +43,34 @@ const GetPDF:React.FC=()=>{
     return(
      <div>
         
-        <center className="text-3xl font-serif">Notes</center>
+        <center className="text-3xl font-serif w-full  bg-slate-100 bg-opacity-30 backdrop-blur fixed top-0">Notes</center>
+
+
        
          
-        <div className="grid grid-cols-3 gap-4 ml-4 mt-8" >
+        <div className="grid grid-cols-3 gap-4 p-4 mt-8 bg-purple-700" >
          
-        {pdflist.map((item, idx) => (
-          <div key={idx} className=" bg-gray-100 rounded-lg p-4 flex flex-col justify-center items-center h-44 font-serif gap-4"
+        {pdflist.map((item, idx) => {
+            const timeUploaded=new Date(parseInt(item.time_uploaded,10))
+          return(
+            <div key={idx} className=" bg-blue-950 rounded-lg p-4 flex flex-col justify-center items-center h-44 font-mono gap-4 shadow-custom-black"
             onMouseEnter={()=>navHandler(idx)}
             onMouseLeave={()=>navHandler(idx)}>
-            <div className={`w-52 h-28 overflow-hidden border border-gray-500  rounded-lg flex flex-col justify-center items-center shadow-custom-black`} >
+            <div className={`w-52 h-28 overflow-hidden border border-gray-200 bg-slate-300 rounded-lg flex flex-col justify-center items-center shadow-custom-black`} >
             <div className={`${current_idx==idx?(show_download_nav?'-translate-y-16':'translate-y-8'):'translate-y-8'} transition-transform duration-700` }>{item.file_name}</div>
                 <div className={`${current_idx==idx?(show_download_nav?'translate-y-1 ':'translate-y-24' ):'translate-y-24'}  transition-transform duration-700 w-52 h-28 border border-gray-500 bg-purple-950 flex flex-col justify-center items-center text-slate-200`}>
                     <a href={`http://localhost:8080/public/pdf/${item.file_path}`} target="_blank" >Download now !!</a>
                     </div>
             </div>
-            <div className="w-52  pl-2 ">Added by:{item.file_by}</div>
-            </div>
+            <div className="w-72 items-center justify-center  pl-2 text-slate-200 border border-gray-700 bg-slate-700 rounded-md">
+                <p>  Added by:{item.file_by}</p>
+                <p>{formatDistanceToNow(timeUploaded,{addSuffix:true})}</p>
+                </div>
            
-        ))}
+            </div>
+          )
+           
+})}
      
       </div>
      </div>

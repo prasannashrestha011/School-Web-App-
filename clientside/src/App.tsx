@@ -16,6 +16,7 @@ import { ComponentProvider } from './context/componentprovider';
 import GoogleLoginPage from './components/googlelogin';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Layout from './components/layout';
+import EventList from './apis/event';
 
 const App:React.FC=()=>{
   const userLoginStatus=window.localStorage.getItem("account_state")
@@ -39,6 +40,7 @@ const App:React.FC=()=>{
                           <Route path='/class/test' element={<Question/>}/>
                           <Route path='/message' element={<WebSocketClient/>} />
                           <Route path='/notes' element={<GetPDF/>}/>
+                          <Route path='/events' element={<EventList/>}/>
                         {/* admin panel*/}
                           <Route element={<AdminOnly/>}>
                             <Route path='/admin-panel' element={<Admin/>} />

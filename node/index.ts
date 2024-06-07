@@ -27,7 +27,7 @@ db.getConnection().then(connection=>{
 });
 const io = new Server(server,{
     cors: {
-        origin: 'http://localhost:3000', 
+        origin: '*', 
         methods: ['GET', 'POST']
     }
 });
@@ -65,6 +65,16 @@ io.on('connection', async(socket: Socket) => {
             console.log(err)
         }   
     });
+    socket.on('dashboard-message',async(user:string,profile_uri:string,time:string,message:string)=>{
+        console.log('dashboard-message->',user,profile_uri,message)
+        socket.broadcast.emit('dashboard-sent-message',{message:{
+            username:user,
+            profile_uri:profile_uri,
+            time:time,
+            message:message
+        }})
+        const [result]=await db.query('INSERT INTO dashboardmessage (username,profile_uri,time_uploaded,message) VALUES(?,?,?,?)',[user,profile_uri,time,message])
+    })
    
 });
 

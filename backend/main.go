@@ -5,7 +5,9 @@ import (
 	"log"
 	"net/http"
 	"project/Userchat"
+	"project/dashboard"
 	"project/database"
+	"project/eventlist"
 	"project/filemanagement"
 	"project/methods"
 	"project/oauth"
@@ -169,10 +171,13 @@ func main() {
 	r.GET("/get-scores", methods.Get_Table_Score)
 
 	r.POST("/upload-image", filemanagement.UploadFile)
-	r.POST("/upload-pdf/:username/:fileName", filemanagement.UploadPdf)
+	r.POST("/upload-pdf/:username/:fileName/:uploadedTime", filemanagement.UploadPdf)
 	r.GET("/get-pdf", filemanagement.GetPdf)
 	r.POST("/insert-messages/:username", Userchat.InsertMessages)
+	r.GET("/get-notifications-list", eventlist.EventList)
+	r.GET("/get-notification-info", eventlist.EventInfo)
 
+	r.GET("/get-dashboard-messages", dashboard.GetDashBoardMessage)
 	r.Run(":8080")
 
 	select {}

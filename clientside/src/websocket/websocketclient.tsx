@@ -28,11 +28,21 @@ const WebSocketClient: React.FC = () => {
         try{
             const response=await axios.get(`http://localhost:8080/get-user-info/${userID}`)
          if(response.status!=200) throw new Error("Error")
-          
-         img.src = response.data.profileURL;
+            if(response.data){
+                  
+                img.src = response.data.profileURL;
+                console.log(response.data.profileURL)
          img.onload = () => {
-             setFetchUserDetails(response.data);
+            console.log('all ok')
+            setFetchUserDetails(response.data);
          };
+        
+    img.onerror = (error) => {
+        console.error('Error loading image:', error);
+        // Handle the error here, e.g., display a placeholder image
+    };
+       
+            }
             
         }catch(err){
             console.log(err)
@@ -160,7 +170,7 @@ const WebSocketClient: React.FC = () => {
   }, [message,fetchUser]);
   return(
         <div >
-        <div className="  h-fit overflow-x-auto  bg-purple-950 main-body">
+        <div className="  h-fit overflow-x-auto  bg-blue-950 main-body">
       
       
         <center>

@@ -35,6 +35,7 @@ func UploadFile(c *gin.Context) {
 func UploadPdf(c *gin.Context) {
 	username := c.Param("username")
 	fileName := c.Param("fileName")
+	uploadedTime := c.Param("uploadedTime")
 	file, fileHeader, err := c.Request.FormFile("pdf-file")
 	if err != nil {
 		fmt.Println(err.Error())
@@ -44,8 +45,8 @@ func UploadPdf(c *gin.Context) {
 	filePath := randomstring + "-" + fileHeader.Filename
 	fmt.Println(fileHeader.Filename + " was uploaded into /public/pdf")
 	//inserting into database
-	insertQuery := "INSERT INTO filetable (file_by,file_path,file_name) VALUES(?,?,?)"
-	_, err = db.Exec(insertQuery, username, filePath, fileName)
+	insertQuery := "INSERT INTO filetable (file_by,file_path,file_name,time_uploaded) VALUES(?,?,?,?)"
+	_, err = db.Exec(insertQuery, username, filePath, fileName, uploadedTime)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -70,7 +71,7 @@ func GetPdf(c *gin.Context) {
 	}
 	for rows.Next() {
 		pdf_file := structure.PdfFile{}
-		err := rows.Scan(&pdf_file.Id, &pdf_file.Username, &pdf_file.FilePath, &pdf_file.FileName)
+		err := rows.Scan(&pdf_file.Id, &pdf_file.Username, &pdf_file.FilePath, &pdf_file.FileName, &pdf_file.Time_Uploaded)
 		if err != nil {
 			fmt.Println(err.Error())
 			return
