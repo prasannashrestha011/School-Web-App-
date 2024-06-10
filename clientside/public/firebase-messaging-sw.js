@@ -1,3 +1,4 @@
+
 importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js');
 firebase.initializeApp({
@@ -24,3 +25,8 @@ firebase.initializeApp({
   
     self.registration.showNotification(notificationTitle, notificationOptions);
   });
+
+self.addEventListener('install',e=>{
+    console.log('service worker installing')
+})
+

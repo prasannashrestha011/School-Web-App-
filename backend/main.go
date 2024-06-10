@@ -178,6 +178,7 @@ func main() {
 	r.GET("/get-notification-info", eventlist.EventInfo)
 
 	r.GET("/get-dashboard-messages", dashboard.GetDashBoardMessage)
+
 	r.Run(":8080")
 
 	select {}
