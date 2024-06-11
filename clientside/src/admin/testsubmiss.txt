@@ -1,0 +1,38 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React,{useState,useEffect} from "react";
+const TestSubmission:React.FC=()=>{
+    return(
+        <div className={`flex justify-center items-start mr-4 border border-black  bg-blue-800 w-80 ${show_table_score?'-translate-x-0':'-translate-x-96'} transition-transform duration-500`} style={{height:'100%'}}>
+        <p className="fixed top-2 left-72"><FontAwesomeIcon icon={faCircleXmark} size="2x" onClick={()=>setShowTableScore(!show_table_score)} /></p>
+            <center>
+               <ul>
+              
+                <span className="font-serif">Recent Test Submission</span>
+               
+    
+                <div className="border border-gray-500 w-64 flex justify-between font-serif text-xl mr-4    ">
+                        <div className="w-32 border-r-2 border-gray-500">Username</div>
+                        <div className="w-32">Score</div>
+                    </div>
+                  
+         
+               {scorelist.map((item,idx)=>{
+                    return(
+                        <li key={idx}>
+                            <div className=" bg-gray-500 flex flex-row w-64 justify-between text-xl font-serif mr-4">                                  
+                                <div className="w-32 border border-slate-800">
+                                <span >{item.username}</span>
+                                </div>
+                                <div className="w-32 border border-slate-800">
+                                <span >{item.score}</span>
+                                </div>
+                            </div>
+                        </li>
+                    )
+                })}
+               </ul>
+            </center>
+          
+        </div>
+    )
+}

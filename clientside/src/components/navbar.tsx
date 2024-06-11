@@ -20,7 +20,7 @@ const NavBar:React.FC<NavBarProp>=({show_nav_bar,setShowNavBar,username,profileU
         setShowUserProfile(!show_user_profile)
     }
     return(
-        <div>
+        <div className="z-50">
             {show_user_profile?id?
             <UserProfile id={id} name={""} email={""} profileURL={""} showprofile={show_user_profile} setShowProfile={setShowUserProfile}/>:"":""}
             <div className={`flex flex-col justify-start items-start w-80 h-svh fixed top-0 pl-4 pt-5    gap-5 bg-blue-950 border-r-2 border-blue-800 border-opacity-20 z-10 ${show_nav_bar?'translate-x-0':'-translate-x-96'} transition-transform duration-500`}>

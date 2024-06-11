@@ -1,3 +1,5 @@
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import React,{useState,useEffect, FormEvent} from "react";
 import { io } from "socket.io-client";
@@ -55,10 +57,16 @@ const AddPdf:React.FC<PdfProp>=({username,profile_uri,show_pdf_panel,setShowPdfP
     return(
         <div >
            
-          <form onSubmit={sendPdf} className="flex flex-col justify-center">
-            <input type="text" value={pdfname} onChange={pdfHandler} />
-            <input type="file" onChange={fileHandler}/>
-            <button type="submit" className="bg-blue-600 text-slate-200 w-60">Submit</button>
+          <form onSubmit={sendPdf} className="flex flex-col justify-center items-center mb-11">
+            <p className="font-semibold" >Upload PDF</p>
+            <input type="text" value={pdfname} onChange={pdfHandler} placeholder="file name" className="pl-2 font-semibold" />
+            <label htmlFor="input-file">
+             <div className="flex justify-center items-center">
+             <p><FontAwesomeIcon icon={faUpload}/></p>
+             <input type="file" onChange={fileHandler} id="input-file" style={{display:'none'}}/>
+             </div>
+            </label>
+            <button type="submit" className="bg-blue-600 text-slate-200 w-40 font-semibold rounded-md">Submit</button>
             </form>
         </div>
     )

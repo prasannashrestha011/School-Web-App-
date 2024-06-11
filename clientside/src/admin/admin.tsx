@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { io } from "socket.io-client";
 import SendNotification from './sendnotification';
 import DashBoard from './dashboard';
+import WebTerminal from './terminal';
 
 interface AdminProp{
     google_id:string,
@@ -34,6 +35,7 @@ const Admin:React.FC=()=>{
     const [show_pdf_panel,setShowPdfPanel]=useState<boolean>(false)
     const [show_table_score,setShowTableScore]=useState<boolean>(false)
     const userID=window.localStorage.getItem("userID")
+    const [isTerminal,setIsTerminal]=useState<boolean>(false)
     const fetchUserInfo=async()=>{
         try{
             const response = await axios.get(`http://localhost:8080/get-user-info/${userID}`);
@@ -74,61 +76,31 @@ const Admin:React.FC=()=>{
             document.body.style.overflow = 'hidden'; // Disable scrolling
         } 
     };
+    const showTerminal=()=>{
+        setIsTerminal(!isTerminal)
+    }
     return(
         <div className="h-svh border  bg-slate-200 flex flex-row justify-between overflow-hidden">
-            <center className="text-3xl font-serif fixed " style={{left:'50%'}}>Admin Panel</center>
-           
-            <p className="fixed">
-                <FontAwesomeIcon icon={faHamburger} onClick={()=>setShowTableScore(!show_table_score)} className="mt-14"/>
-                </p>
-            
-            <div className={`flex justify-center items-start mr-4 border border-black  bg-blue-800 w-80 ${show_table_score?'-translate-x-0':'-translate-x-96'} transition-transform duration-500`} style={{height:'100%'}}>
-            <p className="fixed top-2 left-72"><FontAwesomeIcon icon={faCircleXmark} size="2x" onClick={()=>setShowTableScore(!show_table_score)} /></p>
-                <center>
-                   <ul>
-                  
-                    <span className="font-serif">Recent Test Submission</span>
-                   
+            <nav className="fixed top-0  w-auto h-10 flex justify-end pr-56 items-center" style={{left:'45%'}}>
+            <div className="flex flex-row ">
         
-                    <div className="border border-gray-500 w-64 flex justify-between font-serif text-xl mr-4    ">
-                            <div className="w-32 border-r-2 border-gray-500">Username</div>
-                            <div className="w-32">Score</div>
-                        </div>
-                      
-             
-                   {scorelist.map((item,idx)=>{
-                        return(
-                            <li key={idx}>
-                                <div className=" bg-gray-500 flex flex-row w-64 justify-between text-xl font-serif mr-4">                                  
-                                    <div className="w-32 border border-slate-800">
-                                    <span >{item.username}</span>
-                                    </div>
-                                    <div className="w-32 border border-slate-800">
-                                    <span >{item.score}</span>
-                                    </div>
-                                </div>
-                            </li>
-                        )
-                    })}
-                   </ul>
-                </center>
-              
+            <button onClick={showTerminal} className='font-modeseven text-2xl'>Open Terminal</button>
             </div>
-                    
-           
-
+        </nav>
+       
+                <DashBoard/>                                  
             <div>
         <div>
             {show_pdf_panel?
-            <FontAwesomeIcon icon={faArrowCircleLeft} onClick={togglePanel} size="2x" className=" transition-transform duration-500"/>
-            :<FontAwesomeIcon icon={faArrowCircleRight} onClick={togglePanel} size="2x" className=" transition-transform duration-500 translate-x-64"/>}
+            <FontAwesomeIcon icon={faArrowCircleLeft} onClick={togglePanel} size="2x" className=" transition-transform duration-500 "/>
+            :<FontAwesomeIcon icon={faArrowCircleRight} onClick={togglePanel} size="2x" className=" transition-transform duration-500 translate-x-48"/>}
         </div>
-            <div className={`transition-transform duration-500 ${show_pdf_panel ? 'translate-x-0' : 'translate-x-80'}`}>
+            <div className={`transition-transform duration-500 ${show_pdf_panel ? '-translate-x-3' : 'translate-x-80'}`}>
                {fetchUser?<AddPdf username={fetchUser?.name} profile_uri={fetchUser.profileURL} show_pdf_panel={show_pdf_panel} setShowPdfPanel={setShowPdfPanel}/>:""}
             </div>
             {fetchUser?<SendNotification username={fetchUser?.name} profile_uri={fetchUser.profileURL} />:""}
         </div>
-        <DashBoard/>
+                {isTerminal?<WebTerminal onClose={()=>setIsTerminal(!isTerminal)}/>:""}
         </div>
     )
 }

@@ -75,7 +75,32 @@ io.on('connection', async(socket: Socket) => {
         }})
         const [result]=await db.query('INSERT INTO dashboardmessage (username,profile_uri,time_uploaded,message) VALUES(?,?,?,?)',[user,profile_uri,time,message])
     })
-   
+    socket.on('terminal-help-prompt',async()=>{
+        console.log('terminal help prompt called ...')
+        const helpList = new Map([
+            ["/http_api", 'for api'],
+            ["/admin_info", 'for admin'],
+            ["/clear","clear the terminal"]
+        ]);
+        const helpListObject = Object.fromEntries(helpList);
+        socket.emit('terminal-help-prompt-message',{helplist:helpListObject})
+    })
+    socket.on('http-api-prompt',async()=>{
+        const httpApiList=new Map([
+            ["home","http://localhost:8080/get-questions"],
+            ["test_scores","http://localhost:8080/get-scores"],
+            ["notes","http://localhost:8080/get-pdf"]
+        ])
+        const httpApiListObj=Object.fromEntries(httpApiList)
+        socket.emit('http-api-prompt-message',{httpApiList:httpApiListObj})
+    })
+    socket.on('http-invalid-prompt',async()=>{
+        const httpInvalidPrompt= new Map([
+            ["invalid","prompt not found"]
+        ])
+        const httpInvalidPromptObj=Object.fromEntries(httpInvalidPrompt)
+        socket.emit('http-api-prompt-message',{httpApiList:httpInvalidPromptObj})
+    })
 });
 
 const PORT = process.env.PORT || 8081;
