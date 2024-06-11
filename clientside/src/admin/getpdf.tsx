@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import ComponentHook from "../hooks/componenthook";
 import { formatDistanceToNow } from "date-fns";
+import '../public/css/getpdf.css'
 const GetPDF:React.FC=()=>{
     const [pdflist,setPdfList]=useState<any[]>([])
     const username=window.localStorage.getItem("user_name")
@@ -48,7 +49,7 @@ const GetPDF:React.FC=()=>{
 
        
          
-        <div className="grid grid-cols-3 gap-4 p-4 mt-8 bg-purple-700" >
+        <div className=" pdf-body grid grid-cols-3 gap-4 p-4 mt-8 bg-purple-700" >
          
         {pdflist.map((item, idx) => {
             const timeUploaded=new Date(parseInt(item.time_uploaded,10))

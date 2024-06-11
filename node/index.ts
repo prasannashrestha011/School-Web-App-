@@ -34,10 +34,11 @@ const io = new Server(server,{
 app.get('/', (req: Request, res: Response) => {
     res.send('/heloo')
 });
-
+var conn:number=0;
 io.on('connection', async(socket: Socket) => {
     console.log('client connected', socket.id);
- 
+    conn++;
+    console.log('new connection ',conn)
     const [rows]=await db.query("SELECT id,username,profile_uri,notification_message FROM notificationchats ORDER BY id DESC")
     
     try{
@@ -65,6 +66,10 @@ io.on('connection', async(socket: Socket) => {
             console.log(err)
         }   
     });
+    socket.on('disconnect',(reason)=>{
+        console.log('user disconnected ',socket.id)
+        console.log('reason: ',reason)
+    })
     socket.on('dashboard-message',async(user:string,profile_uri:string,time:string,message:string)=>{
         console.log('dashboard-message->',user,profile_uri,message)
         socket.broadcast.emit('dashboard-sent-message',{message:{

@@ -1,0 +1,21 @@
+
+@media (min-width:400px) and (max-width:800px){
+    .pdf-body {
+        height: 100vh; /* Use viewport height */
+        overflow: scroll;
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 90%;
+    }
+}
+
+@media (max-width:400px) {
+    .pdf-body {
+        height: 100vh; /* Use viewport height */
+        overflow: scroll;
+        display: flex;
+        flex-direction: column;
+        padding-top: 10%;
+        padding-bottom: 40%;
+    }
+}

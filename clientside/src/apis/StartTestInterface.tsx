@@ -50,8 +50,10 @@ const StartTestInterface:React.FC=()=>{
     }
    
    useEffect(()=>{
-    GenerateToken()
-   },[])
+    if(fetched_user){
+        GenerateToken(fetched_user.name)
+    }
+   },[fetched_user])
     return(
         <div className={`${isDarkThemeEnb?'bg-blue-950':'bg-slate-200'} h-screen transition-colors duration-300`}>
             

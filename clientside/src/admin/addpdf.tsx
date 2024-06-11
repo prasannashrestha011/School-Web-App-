@@ -58,7 +58,7 @@ const AddPdf:React.FC<PdfProp>=({username,profile_uri,show_pdf_panel,setShowPdfP
         <div >
            
           <form onSubmit={sendPdf} className="flex flex-col justify-center items-center mb-11">
-            <p className="font-semibold" >Upload PDF</p>
+            <p className="font-semibold" >Upload Your file</p>
             <input type="text" value={pdfname} onChange={pdfHandler} placeholder="file name" className="pl-2 font-semibold" />
             <label htmlFor="input-file">
              <div className="flex justify-center items-center">

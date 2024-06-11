@@ -48,7 +48,7 @@ const DashBoard:React.FC=()=>{
        }
     },[])
     return(
-        <div className=" h-56  overflow-x-auto   mt-14 ml-80 bg-slate-950 border border-black rounded-md scroll-m-1" style={{width:'50%'}}>
+        <div className=" h-56  overflow-x-auto   mt-14 ml-80 bg-slate-950 border border-black rounded-md scroll-m-1" style={{width:'50%',scrollBehavior:'smooth'}}>
             <div className=" flex flex-row  items-center justify-center font-semibold bg-blue-950 text-slate-300 shadow-custom-black ">
                 <p style={{ fontFamily: 'VT323, monospace' }} className="text-xl">Activities</p>
             </div>

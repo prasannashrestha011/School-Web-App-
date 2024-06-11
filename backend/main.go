@@ -178,7 +178,7 @@ func main() {
 	r.GET("/get-notification-info", eventlist.EventInfo)
 
 	r.GET("/get-dashboard-messages", dashboard.GetDashBoardMessage)
-
+	r.POST("/insert-push-notification-id", strategy.InsertPushNotificationId)
 	r.Run(":8080")
 
 	select {}

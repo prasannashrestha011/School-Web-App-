@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -171,4 +172,18 @@ func GetUserInfo(c *gin.Context) {
 		}
 	}
 	c.JSON(http.StatusOK, userInfo)
+}
+func InsertPushNotificationId(c *gin.Context) {
+	id := c.Query("deviceid")
+	username := c.Query("username")
+	insertQuery := "INSERT INTO pushnotificationtable (firebase_id,username) VALUES(?,?)"
+	_, err := db.Exec(insertQuery, id, username)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	log.Println("New firebase id inserted")
+	c.JSON(http.StatusOK, gin.H{
+		"message": "new id inserted",
+	})
 }
